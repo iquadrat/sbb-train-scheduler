@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package org.povworld.sbb;
+option java_outer_classname = "Output";
+
+message TrainRunSection {
+	string entry_time = 1;
+	string exit_time = 2;
+	string route = 3;
+	string route_path = 4;
+	string route_section_id = 5;
+	int32 sequence_number = 6;
+	string section_requirement = 7;
+}
+
+message TrainRun {
+	string service_intention_id = 1;
+	repeated TrainRunSection train_run_sections = 2;
+}
+
+message Solution {
+	string problem_instance_label = 1;
+	int32 problem_instance_hash = 2;
+	int32 hash = 3;
+	repeated TrainRun train_runs = 4;
+}

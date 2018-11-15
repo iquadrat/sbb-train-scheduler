@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+package org.povworld.sbb;
+option java_outer_classname = "Input";
+
+message Connection {
+	string id = 1;
+	string onto_service_intention = 2;
+	string onto_section_marker = 3;
+	string min_connection_time = 4;
+	int32 min_connection_time_seconds = 5; // parsed value of 'min_connection_time'
+}
+
+message SectionRequirement {
+	int32 sequence_number = 1;
+	string section_marker = 2;
+	string type = 3;
+	string entry_earliest = 4;
+	string entry_latest = 9; // soft requirement!
+	string exit_earliest = 10;
+	string exit_latest = 11; // soft requirement!
+	string min_stopping_time = 8;
+	int32 min_stopping_time_seconds = 12; // parsed value of 'min_stopping_time'
+	double entry_delay_weight = 5;
+	double exit_delay_weight = 6;
+	repeated Connection connections = 7;
+}
+
+message ServiceIntention {
+	string id = 1;
+	string route = 2;
+	repeated SectionRequirement section_requirements = 3;
+}
+
+message ResourceOccupations {
+	string resource = 1;
+	string occupation_direction = 2; // ignore
+}
+
+message RouteSection {
+	int32 sequence_number = 1;
+	string route_alternative_marker_at_entry = 9;
+	string route_alternative_marker_at_exit = 2;
+	repeated string section_marker = 3;
+	repeated ResourceOccupations resource_occupations = 4;
+	double penalty = 5;
+	string starting_point = 6;
+	string minimum_running_time = 7;
+	int32 minimum_running_time_seconds = 10; // parsed value of 'minimum_running_time'
+	string ending_point = 8;
+}
+
+message RoutePath {
+	string id = 1;
+	repeated RouteSection route_sections = 2;
+}
+
+message Route {
+	string id = 1;
+	repeated RoutePath route_paths = 2;
+}
+
+message Resource {
+	string id = 1;
+	string release_time = 2;
+	int32 release_time_seconds = 5; // parsed value of 'release_time'
+	bool following_allowed = 3; // always false
+	string following_separation = 4; // ignore
+}
+
+message Parameters {
+	string maxBandabweichung = 1;
+}
+
+message Scenario {
+	string label = 1;
+	int32 hash = 2;
+	repeated ServiceIntention service_intentions = 3;
+	repeated Route routes = 4;
+	repeated Resource resources = 5;
+	Parameters parameters = 6;
+}
